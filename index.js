@@ -102,7 +102,7 @@ async function main() {
     const { conversationInfo } = opts;
 
     let tmr = setTimeout(() => {
-      cb("Oppss, something went wrong! (Timeout)");
+      cb("Oppss, something went wrong! Please try again.");
     }, 45000);
 
     if (conversationInfo) {
@@ -118,7 +118,7 @@ async function main() {
           cb(response.response);
         })
         .catch((e) => {
-          cb("Oppss, something went wrong! (Error)");
+          cb("Oppss, something went wrong! Please try again.");
           console.error("dm error : " + e);
         });
     } else {
@@ -130,7 +130,7 @@ async function main() {
           cb(response);
         })
         .catch((e) => {
-          cb("Oppss, something went wrong! (Error)");
+          cb("Oppss, something went wrong! Please try again.");
           console.error("/ask error : " + e);
         });
     }
