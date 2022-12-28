@@ -216,10 +216,38 @@ async function main() {
             );
             await interaction.editReply({
               files: [attachment],
-              ephemeral: true,
+            });
+
+            // channel id #daily-learning
+
+            // send message to channel #daily-learning
+            const channel = await client.channels.fetch(
+              process.env.DAILY_LEARNING_CHANNEL_ID
+            );
+            channel.send({
+              content: `
+            --------------Start--------------
+              **Someone** asked: ${question}
+              **Bot** answer: \n${content}
+            --------------End--------------
+            \n\n\n
+            `,
+              files: [attachment],
             });
           } else {
-            await interaction.editReply({ content, ephemeral: true });
+            await interaction.editReply({ content });
+            const channel = await client.channels.fetch(
+              process.env.DAILY_LEARNING_CHANNEL_ID
+            );
+            channel.send({
+              content: `
+              --------------Start--------------
+                **someone** asked: ${question}
+                **answer**: ${content}
+              --------------End--------------
+              \n\n\n
+              `,
+            });
           }
         },
         { conversationInfo }
@@ -235,7 +263,7 @@ async function main() {
       await interaction.deferReply();
       stableDiffusion.generate(prompt, async (result) => {
         if (result.error) {
-          await interaction.editReply({ content: "error...", ephemeral: true });
+          await interaction.editReply({ content: "error..." });
           return;
         }
         try {
@@ -251,10 +279,9 @@ async function main() {
           await interaction.editReply({
             content: "done...",
             files: attachments,
-            ephemeral: true,
           });
         } catch (e) {
-          await interaction.editReply({ content: "error...", ephemeral: true });
+          await interaction.editReply({ content: "error..." });
         }
       });
     } catch (e) {
