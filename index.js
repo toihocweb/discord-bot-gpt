@@ -214,9 +214,12 @@ async function main() {
               Buffer.from(content, "utf-8"),
               { name: "response.txt" }
             );
-            await interaction.editReply({ files: [attachment] });
+            await interaction.editReply({
+              files: [attachment],
+              ephemeral: true,
+            });
           } else {
-            await interaction.editReply({ content });
+            await interaction.editReply({ content, ephemeral: true });
           }
         },
         { conversationInfo }
@@ -232,7 +235,7 @@ async function main() {
       await interaction.deferReply();
       stableDiffusion.generate(prompt, async (result) => {
         if (result.error) {
-          await interaction.editReply({ content: "error..." });
+          await interaction.editReply({ content: "error...", ephemeral: true });
           return;
         }
         try {
@@ -248,9 +251,10 @@ async function main() {
           await interaction.editReply({
             content: "done...",
             files: attachments,
+            ephemeral: true,
           });
         } catch (e) {
-          await interaction.editReply({ content: "error..." });
+          await interaction.editReply({ content: "error...", ephemeral: true });
         }
       });
     } catch (e) {
